@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Clasificador de Fallas - Tennessee Eastman Process (TEP)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>Clasificador de Fallas en el Tennessee Eastman Process (TEP)</h1>
+      <p>
+        Proyecto de aprendizaje automático para identificar automáticamente el tipo de falla
+        (IDV0–IDV21) en un proceso químico simulado de alta complejidad.
+      </p>
+      <div class="chips">
+        <div class="chip"><strong>🎯 Objetivo:</strong> Clasificación de 22 fallas (IDV0–IDV21)</div>
+        <div class="chip">⚙️ Proceso Químico &nbsp;|&nbsp; Tennessee Eastman</div>
+        <div class="chip">🤖 Modelo &nbsp;|&nbsp; Random Forest Classifier</div>
+        <div class="chip">📊 Muestras usadas: ~1.14M (80% train / 20% test)</div>
+      </div>
+    </header>
+
+    <main>
+      <!-- Resumen & Objetivo -->
+      <section class="grid-2">
+        <article class="card">
+          <h2><span class="icon">📋</span> Resumen del Proyecto</h2>
+          <p class="highlight">
+            Desarrollar un clasificador capaz de reconocer, a partir de 52 variables de proceso,
+            el tipo de falla presente en el TEP entre 22 posibles estados (incluyendo operación normal).
+          </p>
+          <h3 class="section-title">Objetivo Específico</h3>
+          <ul>
+            <li>Construir un dataset consolidado con datos normales y con fallas.</li>
+            <li>Entrenar un modelo de clasificación multiclase (IDV0–IDV21).</li>
+            <li>Evaluar el desempeño con métricas como Accuracy y F1-Score.</li>
+            <li>Analizar las variables más importantes para la detección de fallas.</li>
+          </ul>
+        </article>
+
+        <!-- Datos y Preparación -->
+        <article class="card">
+          <h2><span class="icon">💾</span> Datos y Preparación</h2>
+          <p><strong>Fuentes de datos (.RData):</strong></p>
+          <ul>
+            <li>TEP_FaultFree_Training.RData</li>
+            <li>TEP_FaultFree_Testing.RData</li>
+            <li>TEP_Faulty_Training.RData</li>
+          </ul>
+
+          <h3 class="section-title">Consolidación</h3>
+          <ul>
+            <li>Datos normales de entrenamiento y prueba.</li>
+            <li>Todas las fallas disponibles (IDV1–IDV21).</li>
+          </ul>
+
+          <div class="chips-row">
+            <span class="chip-small">📈 ~1.1M muestras originales</span>
+            <span class="chip-small">📉 Dataset reducido al 20%</span>
+            <span class="chip-small">🔧 52 variables (XMEAS, XMV)</span>
+          </div>
+        </article>
+      </section>
+
+      <!-- Procesamiento y Modelo -->
+      <section class="grid-2">
+        <article class="card">
+          <h2><span class="icon">⚙️</span> Procesamiento de Datos</h2>
+          <h3 class="section-title">Features y Etiquetas</h3>
+          <ul>
+            <li><strong>X:</strong> 52 variables del proceso (temperaturas, presiones, caudales, concentraciones, etc.).</li>
+            <li><strong>y:</strong> 22 clases de fallas (IDV0–IDV21).</li>
+          </ul>
+
+          <h3 class="section-title">Partición del Dataset</h3>
+          <ul>
+            <li>Entrenamiento: 80% → <strong>916,800</strong> muestras.</li>
+            <li>Prueba: 20% → <strong>229,200</strong> muestras.</li>
+            <li>Se utilizó <strong>estratificación</strong> para mantener la proporción de fallas.</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h2><span class="icon">🤖</span> Modelo de Aprendizaje Automático</h2>
+          <p>Se utilizó un <strong>Random Forest Classifier</strong> con los siguientes ajustes:</p>
+          <ul>
+            <li>Número de árboles: <strong>300</strong>.</li>
+            <li>Profundidad máxima: <strong>max_depth = 20</strong>.</li>
+            <li>Ponderación de clases: <strong>class_weight = "balanced"</strong>.</li>
+          </ul>
+          <p class="legend">
+            El uso de más árboles, una profundidad controlada y pesos balanceados mejora la capacidad del
+            modelo para capturar patrones sin sobreajustar y sin ignorar clases menos frecuentes.
+          </p>
+        </article>
+      </section>
+
+      <!-- Resultados globales -->
+      <section class="card">
+        <h2><span class="icon">📈</span> Resultados Globales</h2>
+        <div class="metric-grid">
+          <div class="metric">
+            <div class="metric-label">Accuracy Global</div>
+            <div class="metric-value">66%</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Macro Average F1</div>
+            <div class="metric-value">0.70</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Weighted Average F1</div>
+            <div class="metric-value">0.67</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Clases con F1 &gt; 0.50</div>
+            <div class="metric-value">16 / 22</div>
+          </div>
+        </div>
+        <p class="legend">
+          El modelo identifica correctamente aproximadamente 2 de cada 3 casos,
+          con desempeño sólido en la mayoría de las fallas.
+        </p>
+      </section>
+
+      <!-- Fallas: Mejores y Peores -->
+      <section class="grid-2">
+        <article class="card">
+          <h2><span class="icon">🏅</span> Desempeño por Falla (Mejores)</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Falla</th>
+                <th>Precision</th>
+                <th>Recall</th>
+                <th>F1-Score</th>
+                <th>Notas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="pill">IDV1</span></td>
+                <td>100%</td>
+                <td>95%</td>
+                <td>0.97</td>
+                <td><span class="badge ok">🟢 Excelente</span></td>
+              </tr>
+              <tr>
+                <td><span class="pill">IDV2</span></td>
+                <td>100%</td>
+                <td>94%</td>
+                <td>0.97</td>
+                <td><span class="badge ok">🟢 Excelente</span></td>
+              </tr>
+              <tr>
+                <td><span class="pill">IDV6</span></td>
+                <td>100%</td>
+                <td>96%</td>
+                <td>0.98</td>
+                <td><span class="badge ok">🟢 Excelente</span></td>
+              </tr>
+              <tr>
+                <td><span class="pill">IDV7</span></td>
+                <td>100%</td>
+                <td>96%</td>
+                <td>0.98</td>
+                <td><span class="badge ok">🟢 Excelente</span></td>
+              </tr>
+              <tr>
+                <td><span class="pill">IDV14</span></td>
+                <td>99%</td>
+                <td>92%</td>
+                <td>0.95</td>
+                <td><span class="badge ok">🟢 Muy bueno</span></td>
+              </tr>
+              <tr>
+                <td><span class="pill">IDV4</span></td>
+                <td>92%</td>
+                <td>95%</td>
+                <td>0.93</td>
+                <td><span class="badge ok">🟢 Muy bueno</span></td>
+              </tr>
+              <tr>
+                <td><span class="pill">IDV8</span></td>
+                <td>98%</td>
+                <td>86%</td>
+                <td>0.92</td>
+                <td><span class="badge ok">🟢 Muy bueno</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="card">
+          <h2><span class="icon">🚨</span> Desempeño por Falla (Problemas)</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Falla</th>
+                <th>Precision</th>
+                <th>Recall</th>
+                <th>F1-Score</th>
+                <th>Notas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="pill">IDV9</span></td>
+                <td>9%</td>
+                <td>2%</td>
+                <td>0.03</td>
+                <td><span class="badge error">❌ Muy mal, alta confusión</span></td>
+              </tr>
+              <tr>
+                <td><span class="pill">IDV15</span></td>
+                <td>12%</td>
+                <td>6%</td>
+                <td>0.08</td>
+                <td><span class="badge error">❌ No se distingue bien</span></td>
+              </tr>
+              <tr>
+                <td><span class="pill">IDV3</span></td>
+                <td>11%</td>
+                <td>41%</td>
+                <td>0.18</td>
+                <td><span class="badge warn">⚠️ Muchos falsos positivos</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="legend">
+            Estas fallas requieren análisis específico: revisión de patrones,
+            posible solapamiento con otras fallas y mejoras en la representación de las variables.
+          </p>
+        </article>
+      </section>
+
+      <!-- Importancia de Features -->
+      <section class="card">
+        <h2><span class="icon">🔍</span> Análisis de Importancia de Variables</h2>
+        <p>
+          Se analizaron las importancias de las variables en el Random Forest.
+          Las <strong>15 variables más importantes</strong> acumulan aproximadamente el
+          <strong>68.5%</strong> de la relevancia total del modelo.
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Variable</th>
+              <th>Tipo</th>
+              <th>Importancia Aproximada</th>
+              <th>Descripción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>xmv_10</td>
+              <td>Manipulada (XMV)</td>
+              <td>10.3%</td>
+              <td>Variable manipulada 10 – señal de controlador.</td>
+            </tr>
+            <tr>
+              <td>xmv_4</td>
+              <td>Manipulada (XMV)</td>
+              <td>8.4%</td>
+              <td>Variable manipulada 4 – acción de control clave.</td>
+            </tr>
+            <tr>
+              <td>xmeas_21</td>
+              <td>Medición (XMEAS)</td>
+              <td>8.2%</td>
+              <td>Sensor de medición 21 – variable de proceso crítica.</td>
+            </tr>
+            <tr>
+              <td>xmeas_1</td>
+              <td>Medición (XMEAS)</td>
+              <td>6.5%</td>
+              <td>Medición 1 – asociada a condiciones de entrada.</td>
+            </tr>
+            <tr>
+              <td>xmeas_9</td>
+              <td>Medición (XMEAS)</td>
+              <td>6.2%</td>
+              <td>Medición 9 – relacionada con calidad o seguridad del proceso.</td>
+            </tr>
+            <tr>
+              <td>xmv_3</td>
+              <td>Manipulada (XMV)</td>
+              <td>5.2%</td>
+              <td>Variable manipulada 3 – ajuste importante del controlador.</td>
+            </tr>
+            <tr>
+              <td>xmeas_22</td>
+              <td>Medición (XMEAS)</td>
+              <td>3.6%</td>
+              <td>Medición 22 – sensor clave para detección de fallas.</td>
+            </tr>
+            <tr>
+              <td>xmeas_10</td>
+              <td>Medición (XMEAS)</td>
+              <td>3.3%</td>
+              <td>Medición 10 – útil para distinguir varios modos de operación.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="legend">
+          <strong>Insight:</strong> Las variables manipuladas (XMV) y ciertas mediciones (XMEAS)
+          son decisivas para identificar la presencia y tipo de falla en el TEP.
+        </p>
+      </section>
+
+      <!-- Distribución de datos -->
+      <section class="card">
+        <h2><span class="icon">📊</span> Distribución de Datos</h2>
+        <ul>
+          <li>Total de 22 clases (IDV0–IDV21).</li>
+          <li>Dataset global <strong>bien balanceado</strong> entre clases.</li>
+          <li>
+            <strong>IDV0 (sin falla)</strong> tiene la mayor presencia, con alrededor de
+            <strong>127,000</strong> muestras.
+          </li>
+          <li>Cada falla IDV1–IDV20 tiene aproximadamente <strong>40,000</strong> muestras.</li>
+        </ul>
+        <p class="legend">
+          El balance entre clases ayuda al modelo a aprender de forma más equitativa,
+          aunque ciertas fallas siguen siendo más difíciles de distinguir por su naturaleza.
+        </p>
+      </section>
+
+      <!-- Conclusiones y mejoras -->
+      <section class="grid-2">
+        <article class="card">
+          <h2><span class="icon">✅</span> Conclusiones Principales</h2>
+          <ul>
+            <li>
+              El modelo tiene un <strong>buen desempeño global</strong> (Accuracy 66%, F1 Macro 0.70),
+              considerando la complejidad del proceso y la cantidad de clases.
+            </li>
+            <li>
+              Las fallas <strong>IDV1, IDV2, IDV6, IDV7</strong> se identifican de forma
+              excelente (F1 &gt; 0.95).
+            </li>
+            <li>
+              La mayoría de las fallas (<strong>16 de 22</strong>) alcanzan
+              F1-Score mayor a 0.50.
+            </li>
+            <li>
+              El análisis de importancia muestra qué sensores y señales de control son más útiles
+              para la detección automática de fallas.
+            </li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h2><span class="icon">🚧</span> Líneas de Trabajo Futuras</h2>
+          <ul>
+            <li>
+              Analizar en detalle las fallas <strong>IDV3, IDV9, IDV15</strong> para entender
+              por qué se confunden con otras clases.
+            </li>
+            <li>
+              Aplicar <strong>técnicas de ingeniería de características</strong>
+              (ventanas temporales, estadísticas, variables derivadas).
+            </li>
+            <li>
+              Realizar un <strong>ajuste fino</strong> de hiperparámetros (GridSearch / RandomizedSearch).
+            </li>
+            <li>
+              Probar modelos complementarios (Gradient Boosting, XGBoost, SVM, redes neuronales).
+            </li>
+            <li>
+              Evaluar técnicas de <strong>balanceo</strong> como SMOTE o focal loss para mejorar
+              el manejo de clases difíciles.
+            </li>
+          </ul>
+        </article>
+      </section>
+
+      <footer>
+        Proyecto: Clasificación de Fallas en el Tennessee Eastman Process (TEP) ·
+        Página estática de resultados del modelo de aprendizaje automático.
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
