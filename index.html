@@ -1,388 +1,199 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
   <meta charset="UTF-8" />
   <title>Clasificador de Fallas - Tennessee Eastman Process (TEP)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#4A5D4E",
+            "background-light": "#F0F4F8",
+            "background-dark": "#222825",
+            "secondary": "#5D615B",
+            "mint": "#E0EADD"
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
 </head>
-<body>
-  <div class="page">
-    <header>
-      <h1>Clasificador de Fallas en el Tennessee Eastman Process (TEP)</h1>
-      <p>
-        Proyecto de aprendizaje automático para identificar automáticamente el tipo de falla
-        (IDV0–IDV21) en un proceso químico simulado de alta complejidad.
-      </p>
-      <div class="chips">
-        <div class="chip"><strong>🎯 Objetivo:</strong> Clasificación de 22 fallas (IDV0–IDV21)</div>
-        <div class="chip">⚙️ Proceso Químico &nbsp;|&nbsp; Tennessee Eastman</div>
-        <div class="chip">🤖 Modelo &nbsp;|&nbsp; Random Forest Classifier</div>
-        <div class="chip">📊 Muestras usadas: ~1.14M (80% train / 20% test)</div>
+<body class="bg-background-light dark:bg-background-dark text-white selection:bg-primary selection:text-background-light font-display">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+  <header class="sticky top-0 z-50 w-full border-b border-primary/20 bg-background-dark/80 backdrop-blur-md px-6 lg:px-20 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-12">
+        <div class="flex items-center gap-3 text-primary">
+          <span class="material-symbols-outlined text-3xl font-bold">science</span>
+          <h2 class="text-xl font-black leading-tight tracking-tight uppercase">TEP Fault Classifier</h2>
+        </div>
+        <nav class="hidden md:flex items-center gap-8">
+          <a class="text-white hover:text-primary text-sm font-semibold transition-colors" href="#tep">TEP</a>
+          <a class="text-white hover:text-primary text-sm font-semibold transition-colors" href="#clasificacion">Clasificación</a>
+          <a class="text-white hover:text-primary text-sm font-semibold transition-colors" href="#resultados">Resultados</a>
+          <a class="text-white hover:text-primary text-sm font-semibold transition-colors" href="#recursos">Recursos</a>
+        </nav>
       </div>
-    </header>
-
-    <main>
-      <!-- Resumen & Objetivo -->
-      <section class="grid-2">
-        <article class="card">
-          <h2><span class="icon">📋</span> Resumen del Proyecto</h2>
-          <p class="highlight">
-            Desarrollar un clasificador capaz de reconocer, a partir de 52 variables de proceso,
-            el tipo de falla presente en el TEP entre 22 posibles estados (incluyendo operación normal).
+      <div class="flex items-center gap-6">
+        <button class="bg-primary hover:bg-mint text-background-light px-6 py-2 rounded-lg text-sm font-bold transition-all transform hover:scale-105">
+          Descargar Reporte
+        </button>
+      </div>
+    </div>
+  </header>
+  <main class="flex-1">
+    <!-- Portada -->
+    <section class="max-w-7xl mx-auto px-6 lg:px-20 py-16 lg:py-24">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div class="flex flex-col gap-8">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/30 w-fit">
+            <span class="flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
+            <span class="text-primary text-xs font-bold uppercase tracking-widest">TEP Benchmark</span>
+          </div>
+          <h1 class="text-5xl lg:text-7xl font-black leading-[1.1] tracking-tighter text-white">Clasificador de Fallas en el Tennessee Eastman Process</h1>
+          <p class="text-white text-lg lg:text-xl max-w-xl leading-relaxed">
+            Benchmark industrial para análisis de datos y detección de fallas en procesos químicos complejos. Basado en el modelo TEP y técnicas avanzadas de aprendizaje automático.
           </p>
-          <h3 class="section-title">Objetivo Específico</h3>
-          <ul>
-            <li>Construir un dataset consolidado con datos normales y con fallas.</li>
-            <li>Entrenar un modelo de clasificación multiclase (IDV0–IDV21).</li>
-            <li>Evaluar el desempeño con métricas como Accuracy y F1-Score.</li>
-            <li>Analizar las variables más importantes para la detección de fallas.</li>
-          </ul>
-        </article>
-
-        <!-- Datos y Preparación -->
-        <article class="card">
-          <h2><span class="icon">💾</span> Datos y Preparación</h2>
-          <p><strong>Fuentes de datos (.RData):</strong></p>
-          <ul>
-            <li>TEP_FaultFree_Training.RData</li>
-            <li>TEP_FaultFree_Testing.RData</li>
-            <li>TEP_Faulty_Training.RData</li>
-          </ul>
-
-          <h3 class="section-title">Consolidación</h3>
-          <ul>
-            <li>Datos normales de entrenamiento y prueba.</li>
-            <li>Todas las fallas disponibles (IDV1–IDV21).</li>
-          </ul>
-
-          <div class="chips-row">
-            <span class="chip-small">📈 ~1.1M muestras originales</span>
-            <span class="chip-small">📉 Dataset reducido al 20%</span>
-            <span class="chip-small">🔧 52 variables (XMEAS, XMV)</span>
-          </div>
-        </article>
-      </section>
-
-      <!-- Procesamiento y Modelo -->
-      <section class="grid-2">
-        <article class="card">
-          <h2><span class="icon">⚙️</span> Procesamiento de Datos</h2>
-          <h3 class="section-title">Features y Etiquetas</h3>
-          <ul>
-            <li><strong>X:</strong> 52 variables del proceso (temperaturas, presiones, caudales, concentraciones, etc.).</li>
-            <li><strong>y:</strong> 22 clases de fallas (IDV0–IDV21).</li>
-          </ul>
-
-          <h3 class="section-title">Partición del Dataset</h3>
-          <ul>
-            <li>Entrenamiento: 80% → <strong>916,800</strong> muestras.</li>
-            <li>Prueba: 20% → <strong>229,200</strong> muestras.</li>
-            <li>Se utilizó <strong>estratificación</strong> para mantener la proporción de fallas.</li>
-          </ul>
-        </article>
-
-        <article class="card">
-          <h2><span class="icon">🤖</span> Modelo de Aprendizaje Automático</h2>
-          <p>Se utilizó un <strong>Random Forest Classifier</strong> con los siguientes ajustes:</p>
-          <ul>
-            <li>Número de árboles: <strong>300</strong>.</li>
-            <li>Profundidad máxima: <strong>max_depth = 20</strong>.</li>
-            <li>Ponderación de clases: <strong>class_weight = "balanced"</strong>.</li>
-          </ul>
-          <p class="legend">
-            El uso de más árboles, una profundidad controlada y pesos balanceados mejora la capacidad del
-            modelo para capturar patrones sin sobreajustar y sin ignorar clases menos frecuentes.
-          </p>
-        </article>
-      </section>
-
-      <!-- Resultados globales -->
-      <section class="card">
-        <h2><span class="icon">📈</span> Resultados Globales</h2>
-        <div class="metric-grid">
-          <div class="metric">
-            <div class="metric-label">Accuracy Global</div>
-            <div class="metric-value">66%</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Macro Average F1</div>
-            <div class="metric-value">0.70</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Weighted Average F1</div>
-            <div class="metric-value">0.67</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Clases con F1 &gt; 0.50</div>
-            <div class="metric-value">16 / 22</div>
+            <div class="flex flex-wrap gap-4 pt-4">
+              <span class="bg-mint text-primary px-6 py-2 rounded-xl text-base font-bold flex items-center gap-2">22 fallas (IDV0–IDV21)</span>
+              <span class="bg-mint text-primary px-6 py-2 rounded-xl text-base font-bold flex items-center gap-2">52 variables</span>
+              <span class="bg-mint text-primary px-6 py-2 rounded-xl text-base font-bold flex items-center gap-2">Random Forest</span>
+              <span class="bg-mint text-primary px-6 py-2 rounded-xl text-base font-bold flex items-center gap-2">~1.14M muestras</span>
           </div>
         </div>
-        <p class="legend">
-          El modelo identifica correctamente aproximadamente 2 de cada 3 casos,
-          con desempeño sólido en la mayoría de las fallas.
-        </p>
-      </section>
-
-      <!-- Fallas: Mejores y Peores -->
-      <section class="grid-2">
-        <article class="card">
-          <h2><span class="icon">🏅</span> Desempeño por Falla (Mejores)</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Falla</th>
-                <th>Precision</th>
-                <th>Recall</th>
-                <th>F1-Score</th>
-                <th>Notas</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><span class="pill">IDV1</span></td>
-                <td>100%</td>
-                <td>95%</td>
-                <td>0.97</td>
-                <td><span class="badge ok">🟢 Excelente</span></td>
-              </tr>
-              <tr>
-                <td><span class="pill">IDV2</span></td>
-                <td>100%</td>
-                <td>94%</td>
-                <td>0.97</td>
-                <td><span class="badge ok">🟢 Excelente</span></td>
-              </tr>
-              <tr>
-                <td><span class="pill">IDV6</span></td>
-                <td>100%</td>
-                <td>96%</td>
-                <td>0.98</td>
-                <td><span class="badge ok">🟢 Excelente</span></td>
-              </tr>
-              <tr>
-                <td><span class="pill">IDV7</span></td>
-                <td>100%</td>
-                <td>96%</td>
-                <td>0.98</td>
-                <td><span class="badge ok">🟢 Excelente</span></td>
-              </tr>
-              <tr>
-                <td><span class="pill">IDV14</span></td>
-                <td>99%</td>
-                <td>92%</td>
-                <td>0.95</td>
-                <td><span class="badge ok">🟢 Muy bueno</span></td>
-              </tr>
-              <tr>
-                <td><span class="pill">IDV4</span></td>
-                <td>92%</td>
-                <td>95%</td>
-                <td>0.93</td>
-                <td><span class="badge ok">🟢 Muy bueno</span></td>
-              </tr>
-              <tr>
-                <td><span class="pill">IDV8</span></td>
-                <td>98%</td>
-                <td>86%</td>
-                <td>0.92</td>
-                <td><span class="badge ok">🟢 Muy bueno</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </article>
-
-        <article class="card">
-          <h2><span class="icon">🚨</span> Desempeño por Falla (Problemas)</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Falla</th>
-                <th>Precision</th>
-                <th>Recall</th>
-                <th>F1-Score</th>
-                <th>Notas</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><span class="pill">IDV9</span></td>
-                <td>9%</td>
-                <td>2%</td>
-                <td>0.03</td>
-                <td><span class="badge error">❌ Muy mal, alta confusión</span></td>
-              </tr>
-              <tr>
-                <td><span class="pill">IDV15</span></td>
-                <td>12%</td>
-                <td>6%</td>
-                <td>0.08</td>
-                <td><span class="badge error">❌ No se distingue bien</span></td>
-              </tr>
-              <tr>
-                <td><span class="pill">IDV3</span></td>
-                <td>11%</td>
-                <td>41%</td>
-                <td>0.18</td>
-                <td><span class="badge warn">⚠️ Muchos falsos positivos</span></td>
-              </tr>
-            </tbody>
-          </table>
-          <p class="legend">
-            Estas fallas requieren análisis específico: revisión de patrones,
-            posible solapamiento con otras fallas y mejoras en la representación de las variables.
+        <div class="relative group">
+          <div class="relative bg-background-dark border border-primary/10 rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center">
+            <img class="w-auto h-auto max-h-96 object-contain" src="static/Diagrama del Tennessee Eastman Process.jpg" alt="Diagrama del Tennessee Eastman Process" />
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ¿Qué es el Tennessee Eastman Process? -->
+    <section id="tep" class="max-w-7xl mx-auto px-6 lg:px-20 py-16">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div class="flex flex-col gap-6">
+          <h2 class="text-4xl font-black uppercase tracking-tight text-white mb-4">¿Qué es el Tennessee Eastman Process?</h2>
+          <p class="text-white text-lg max-w-xl leading-relaxed">
+            El Tennessee Eastman Process (TEP) es un modelo de planta química simulada que reproduce la dinámica de una instalación industrial real dedicada a la producción de productos químicos mediante reacciones de síntesis. Integra reactores, separadores, compresores y sistemas de reciclaje, permitiendo el estudio de la interacción entre etapas y la respuesta ante perturbaciones. Es ampliamente utilizado en investigación industrial por su capacidad para generar escenarios complejos y datos representativos.
           </p>
-        </article>
-      </section>
-
-      <!-- Importancia de Features -->
-      <section class="card">
-        <h2><span class="icon">🔍</span> Análisis de Importancia de Variables</h2>
-        <p>
-          Se analizaron las importancias de las variables en el Random Forest.
-          Las <strong>15 variables más importantes</strong> acumulan aproximadamente el
-          <strong>68.5%</strong> de la relevancia total del modelo.
-        </p>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Variable</th>
-              <th>Tipo</th>
-              <th>Importancia Aproximada</th>
-              <th>Descripción</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>xmv_10</td>
-              <td>Manipulada (XMV)</td>
-              <td>10.3%</td>
-              <td>Variable manipulada 10 – señal de controlador.</td>
-            </tr>
-            <tr>
-              <td>xmv_4</td>
-              <td>Manipulada (XMV)</td>
-              <td>8.4%</td>
-              <td>Variable manipulada 4 – acción de control clave.</td>
-            </tr>
-            <tr>
-              <td>xmeas_21</td>
-              <td>Medición (XMEAS)</td>
-              <td>8.2%</td>
-              <td>Sensor de medición 21 – variable de proceso crítica.</td>
-            </tr>
-            <tr>
-              <td>xmeas_1</td>
-              <td>Medición (XMEAS)</td>
-              <td>6.5%</td>
-              <td>Medición 1 – asociada a condiciones de entrada.</td>
-            </tr>
-            <tr>
-              <td>xmeas_9</td>
-              <td>Medición (XMEAS)</td>
-              <td>6.2%</td>
-              <td>Medición 9 – relacionada con calidad o seguridad del proceso.</td>
-            </tr>
-            <tr>
-              <td>xmv_3</td>
-              <td>Manipulada (XMV)</td>
-              <td>5.2%</td>
-              <td>Variable manipulada 3 – ajuste importante del controlador.</td>
-            </tr>
-            <tr>
-              <td>xmeas_22</td>
-              <td>Medición (XMEAS)</td>
-              <td>3.6%</td>
-              <td>Medición 22 – sensor clave para detección de fallas.</td>
-            </tr>
-            <tr>
-              <td>xmeas_10</td>
-              <td>Medición (XMEAS)</td>
-              <td>3.3%</td>
-              <td>Medición 10 – útil para distinguir varios modos de operación.</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <p class="legend">
-          <strong>Insight:</strong> Las variables manipuladas (XMV) y ciertas mediciones (XMEAS)
-          son decisivas para identificar la presencia y tipo de falla en el TEP.
-        </p>
-      </section>
-
-      <!-- Distribución de datos -->
-      <section class="card">
-        <h2><span class="icon">📊</span> Distribución de Datos</h2>
-        <ul>
-          <li>Total de 22 clases (IDV0–IDV21).</li>
-          <li>Dataset global <strong>bien balanceado</strong> entre clases.</li>
-          <li>
-            <strong>IDV0 (sin falla)</strong> tiene la mayor presencia, con alrededor de
-            <strong>127,000</strong> muestras.
-          </li>
-          <li>Cada falla IDV1–IDV20 tiene aproximadamente <strong>40,000</strong> muestras.</li>
-        </ul>
-        <p class="legend">
-          El balance entre clases ayuda al modelo a aprender de forma más equitativa,
-          aunque ciertas fallas siguen siendo más difíciles de distinguir por su naturaleza.
-        </p>
-      </section>
-
-      <!-- Conclusiones y mejoras -->
-      <section class="grid-2">
-        <article class="card">
-          <h2><span class="icon">✅</span> Conclusiones Principales</h2>
-          <ul>
-            <li>
-              El modelo tiene un <strong>buen desempeño global</strong> (Accuracy 66%, F1 Macro 0.70),
-              considerando la complejidad del proceso y la cantidad de clases.
-            </li>
-            <li>
-              Las fallas <strong>IDV1, IDV2, IDV6, IDV7</strong> se identifican de forma
-              excelente (F1 &gt; 0.95).
-            </li>
-            <li>
-              La mayoría de las fallas (<strong>16 de 22</strong>) alcanzan
-              F1-Score mayor a 0.50.
-            </li>
-            <li>
-              El análisis de importancia muestra qué sensores y señales de control son más útiles
-              para la detección automática de fallas.
-            </li>
+          <ul class="list-disc ml-6 text-white text-base">
+            <li>Reactores: Transforman reactivos en productos y subproductos bajo condiciones controladas.</li>
+            <li>Separadores: Gestionan la purificación y recuperación de materiales.</li>
+            <li>Reciclaje: Permite reutilización de corrientes, optimizando eficiencia y rendimiento.</li>
+            <li>Variables: 41 medidas (XMEAS) y 11 manipuladas (XMV).</li>
+            <li>Dinámica compleja: Múltiples lazos de control, interacciones no lineales y retardos temporales.</li>
           </ul>
-        </article>
-
-        <article class="card">
-          <h2><span class="icon">🚧</span> Líneas de Trabajo Futuras</h2>
-          <ul>
-            <li>
-              Analizar en detalle las fallas <strong>IDV3, IDV9, IDV15</strong> para entender
-              por qué se confunden con otras clases.
-            </li>
-            <li>
-              Aplicar <strong>técnicas de ingeniería de características</strong>
-              (ventanas temporales, estadísticas, variables derivadas).
-            </li>
-            <li>
-              Realizar un <strong>ajuste fino</strong> de hiperparámetros (GridSearch / RandomizedSearch).
-            </li>
-            <li>
-              Probar modelos complementarios (Gradient Boosting, XGBoost, SVM, redes neuronales).
-            </li>
-            <li>
-              Evaluar técnicas de <strong>balanceo</strong> como SMOTE o focal loss para mejorar
-              el manejo de clases difíciles.
-            </li>
+        </div>
+        <div>
+          <img src="static/TEP-Planta.png" alt="Flujo principal del proceso TEP" class="rounded-2xl shadow-xl w-full max-w-lg mx-auto" />
+        </div>
+      </div>
+    </section>
+    <!-- Clasificación de fallas y análisis de datos -->
+    <section id="clasificacion" class="max-w-7xl mx-auto px-6 lg:px-20 py-16">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div class="flex flex-col gap-6">
+          <h2 class="text-4xl font-black uppercase tracking-tight text-white mb-4">Clasificación de fallas y análisis de datos</h2>
+          <h3 class="text-xl font-bold text-white">Tipos de Fallas Analizadas</h3>
+          <p class="text-white text-base">
+            El modelo analiza 22 tipos de fallas, abarcando desde condiciones de operación normal (IDV0) hasta fallas específicas en sensores, actuadores y componentes del proceso (IDV1–IDV21). Cada clase representa un escenario particular de anomalía, permitiendo evaluar la capacidad del sistema para distinguir entre modos de operación y eventos adversos.
+          </p>
+          <h3 class="text-xl font-bold text-white">Estructura de los Datos</h3>
+          <p class="text-white text-base">
+            Los datos se estructuran mediante la consolidación de registros históricos de variables medidas y manipuladas, segmentados en conjuntos de entrenamiento y prueba. Se emplea estratificación para mantener la proporción de fallas, garantizando la representatividad y la validación del modelo. Las características extraídas incluyen valores instantáneos, tendencias temporales, estadísticas agregadas y variables derivadas.
+          </p>
+          <h3 class="text-xl font-bold text-white">Ejemplo de variables</h3>
+          <ul class="list-disc ml-6 text-white text-base">
+            <li>XMEAS_21: Sensor de medición de variable crítica</li>
+            <li>XMV_10: Señal manipulada de controlador</li>
+            <li>XMEAS_9: Medición relacionada con calidad o seguridad</li>
+            <li>XMV_4: Acción de control clave</li>
           </ul>
-        </article>
-      </section>
-
-      <footer>
-        Proyecto: Clasificación de Fallas en el Tennessee Eastman Process (TEP) ·
-        Página estática de resultados del modelo de aprendizaje automático.
-      </footer>
-    </main>
-  </div>
+        </div>
+        <div>
+          <img src="static/DATAR.png" alt="Performance del clasificador de fallas" class="rounded-2xl shadow-xl w-full max-w-lg mx-auto" />
+        </div>
+      </div>
+      <div class="mt-16">
+        <h3 class="text-xl font-bold text-white mb-4">Performance del Clasificador</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div class="glass-panel p-8 rounded-2xl border-l-4 border-l-primary bg-mint/30">
+            <p class="text-white text-sm font-semibold mb-2">Accuracy Global</p>
+            <h3 class="text-white text-3xl font-black">66%</h3>
+          </div>
+          <div class="glass-panel p-8 rounded-2xl border-l-4 border-l-primary bg-mint/30">
+            <p class="text-white text-sm font-semibold mb-2">Macro Average F1</p>
+            <h3 class="text-white text-3xl font-black">0.70</h3>
+          </div>
+          <div class="glass-panel p-8 rounded-2xl border-l-4 border-l-primary bg-mint/30">
+            <p class="text-white text-sm font-semibold mb-2">Weighted Average F1</p>
+            <h3 class="text-white text-3xl font-black">0.67</h3>
+          </div>
+          <div class="glass-panel p-8 rounded-2xl border-l-4 border-l-primary bg-mint/30">
+            <p class="text-white text-sm font-semibold mb-2">Clases con F1 &gt; 0.50</p>
+            <h3 class="text-white text-3xl font-black">16 / 22</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Recursos y enlaces externos -->
+    <section id="recursos" class="max-w-7xl mx-auto px-6 lg:px-20 py-16">
+      <div class="glass-panel rounded-3xl overflow-hidden border border-primary/10 bg-mint/30">
+        <div class="p-8 border-b border-primary/10 flex flex-wrap items-center justify-between gap-6">
+          <h2 class="text-2xl font-bold flex items-center gap-3 text-white">
+            <span class="material-symbols-outlined text-primary">link</span>
+            Recursos y enlaces útiles
+          </h2>
+        </div>
+        <div class="p-8">
+          <ul class="list-disc ml-6 text-white text-base">
+            <li><a href="https://github.com/KeepFloyding/TEP" target="_blank" class="text-white font-semibold hover:underline">Repositorio KeepFloyding/TEP (Open Source Benchmark)</a></li>
+            <li><a href="https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/6C3JR1" target="_blank" class="text-white font-semibold hover:underline">Dataset original del Tennessee Eastman Process</a></li>
+            <li><a href="https://github.com/KeepFloyding/TEP/tree/main/docs" target="_blank" class="text-white font-semibold hover:underline">Documentación técnica y diagramas TEP</a></li>
+            <li><a href="https://www.sciencedirect.com/science/article/pii/S0098135418306516" target="_blank" class="text-white font-semibold hover:underline">Artículo científico: Benchmarking Fault Detection in TEP</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <!-- Conclusión -->
+    <section class="max-w-7xl mx-auto px-6 lg:px-20 py-16">
+      <div class="glass-panel rounded-3xl overflow-hidden border border-primary/10 bg-mint/30">
+        <div class="p-8">
+          <h2 class="text-2xl font-bold flex items-center gap-3 text-white mb-4">
+            <span class="material-symbols-outlined text-primary">check_circle</span>
+            Conclusión: Utilidad en Entornos Industriales
+          </h2>
+          <p class="text-white text-lg">
+            La aplicación de modelos de clasificación de fallas en el Tennessee Eastman Process demuestra el potencial de la inteligencia artificial y el análisis de datos para mejorar la seguridad, reducir costos y optimizar la toma de decisiones en plantas químicas reales. La capacidad de detectar anomalías de forma temprana, fundamentada en la dinámica de procesos y el control industrial, permite anticipar eventos adversos y actuar de manera proactiva. El TEP, como banco de pruebas, facilita la innovación y el desarrollo de soluciones robustas para la industria, integrando sensores, actuadores y algoritmos avanzados en la supervisión inteligente de sistemas complejos.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="border-t border-primary/10 bg-background-dark py-12 px-6 lg:px-20">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+      <div class="flex items-center gap-3 text-primary opacity-80">
+        <span class="material-symbols-outlined">science</span>
+        <h2 class="text-lg font-black uppercase tracking-tight">TEP Fault Classifier</h2>
+      </div>
+      <p class="text-white text-sm">© 2026 Proyecto TEP. Todos los derechos reservados.</p>
+      <div class="flex gap-6">
+        <a class="text-white hover:text-primary transition-colors" href="#recursos">Recursos</a>
+        <a class="text-white hover:text-primary transition-colors" href="#">Privacidad</a>
+        <a class="text-white hover:text-primary transition-colors" href="#">Términos</a>
+      </div>
+    </div>
+  </footer>
+</div>
 </body>
 </html>

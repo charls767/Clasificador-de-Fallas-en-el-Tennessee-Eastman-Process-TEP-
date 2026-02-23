@@ -1,285 +1,276 @@
 :root {
-  --bg: #0f172a;
-  --bg-soft: #1e293b;
-  --card: #020617;
-  --accent: #38bdf8;
-  --accent-soft: rgba(56, 189, 248, 0.15);
-  --text: #e5e7eb;
-  --muted: #9ca3af;
-  --error: #f97373;
-  --ok: #4ade80;
-  --warn: #facc15;
-  --border: #1f2937;
+  --verde-musgo: #4A5D4E;
+  --gris-verdoso: #5D615B;
+  --gris-palido: #F0F4F8;
+  --verde-menta: #E0EADD;
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
 }
 
+
+
+/* Body y estilos generales */
 body {
-  background: radial-gradient(circle at top, #1f2937 0, #020617 45%, #000 100%);
-  color: var(--text);
-  line-height: 1.5;
+  background: #222825;
+  color: #ffffff !important;
+  margin: 0;
+  padding: 0;
+  opacity: 1 !important;
 }
 
-.page {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 1.5rem 1.25rem 3rem;
+/* Asegurar que todo el texto sea blanco y visible */
+p, li, span, a, div, label, td, th {
+  color: #ffffff !important;
+  opacity: 1 !important;
 }
 
+/* Sobrescribir clases de Tailwind */
+.text-secondary, .text-slate-400, .text-slate-500, .text-slate-600, .dark\:text-slate-100, .dark\:text-slate-400, .dark\:text-slate-500 {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* Todas las variantes de texto gris */
+[class*="text-slate"], [class*="text-gray"], [class*="text-secondary"] {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+main p, main li, main span, main div, section p, section li, section span, section div {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* Títulos */
+h1, h2, h3, h4, h5, h6 {
+  color: #ffffff !important;
+  opacity: 1 !important;
+  font-weight: 700;
+}
+
+/* Quitar opacidad de todos los elementos */
+[class*="opacity"] {
+  opacity: 1 !important;
+}
+
+.opacity-10, .opacity-20, .opacity-25, .opacity-30, .opacity-40, .opacity-50, .opacity-60, .opacity-70, .opacity-80, .opacity-90 {
+  opacity: 1 !important;
+}
+
+/* Estilos de header */
 header {
-  border-radius: 1.5rem;
-  padding: 1.75rem 1.5rem;
-  background: linear-gradient(
-    135deg,
-    rgba(56, 189, 248, 0.12),
-    rgba(20, 184, 166, 0.08)
-  );
-  border: 1px solid rgba(148, 163, 184, 0.25);
-  backdrop-filter: blur(18px);
-  margin-bottom: 1.75rem;
-  position: sticky;
-  top: 0.75rem;
-  z-index: 10;
+  background: rgba(34, 40, 37, 0.95) !important;
+  border-bottom: 1px solid rgba(74, 93, 78, 0.3);
+  backdrop-filter: blur(8px);
 }
 
-header h1 {
-  font-size: 1.6rem;
-  margin-bottom: 0.25rem;
+header nav a {
+  color: #ffffff !important;
+  opacity: 1 !important;
+  transition: color 0.2s;
 }
 
-header p {
-  color: var(--muted);
-  font-size: 0.95rem;
-  max-width: 650px;
+header nav a:hover {
+  color: #4A5D4E !important;
 }
 
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
+/* Panel de vidrio */
+.glass-panel {
+  background: rgba(19, 236, 236, 0.03);
+  border: 1px solid rgba(74, 93, 78, 0.2);
+  backdrop-filter: blur(8px);
 }
 
-.chip {
-  font-size: 0.75rem;
-  padding: 0.3rem 0.7rem;
-  border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.4);
-  background-color: rgba(15, 23, 42, 0.85);
-  color: var(--muted);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  white-space: nowrap;
+/* Botones */
+button {
+  opacity: 1 !important;
+  background-color: #4A5D4E;
+  color: #ffffff !important;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-.chip strong {
-  color: var(--accent);
-  font-weight: 600;
+button:hover {
+  background-color: #3a4d3e;
+  transform: scale(1.05);
 }
 
-main {
-  display: grid;
-  grid-template-columns: minmax(0, 3fr);
-  gap: 1.25rem;
+/* Enlaces */
+a {
+  color: #ffffff !important;
+  opacity: 1 !important;
+  text-decoration: none;
+  transition: color 0.2s;
 }
 
-.grid-2 {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.2rem;
+a:hover {
+  color: #4A5D4E !important;
 }
 
-.card {
-  background: radial-gradient(circle at top left, #1f2937 0, #020617 55%);
-  border-radius: 1.25rem;
-  padding: 1.2rem 1.25rem;
-  border: 1px solid rgba(31, 41, 55, 0.95);
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.7);
+/* Clases de texto */
+.text-secondary {
+  color: #ffffff !important;
+  opacity: 1 !important;
 }
 
-.card h2 {
-  font-size: 1.05rem;
-  margin-bottom: 0.6rem;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
+.text-primary {
+  color: #ffffff !important;
+  opacity: 1 !important;
 }
 
-.card h2 span.icon {
-  font-size: 1.1rem;
+.text-white {
+  color: #ffffff !important;
+  opacity: 1 !important;
 }
 
-.section-title {
-  font-size: 1.1rem;
-  margin: 0.75rem 0 0.4rem;
+.text-slate-100, .text-slate-400, .text-slate-500, .text-slate-600 {
+  color: #ffffff !important;
+  opacity: 1 !important;
 }
 
-.card p,
-.card li {
-  font-size: 0.92rem;
-  color: var(--muted);
-}
-
-.card ul {
-  margin-left: 1.1rem;
-  margin-top: 0.3rem;
-  display: grid;
-  gap: 0.15rem;
-}
-
-.metric-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 0.7rem;
-  margin-top: 0.6rem;
-}
-
-.metric {
-  background-color: var(--card);
-  border-radius: 0.85rem;
-  padding: 0.5rem 0.7rem;
-  border: 1px solid var(--border);
-}
-
-.metric-label {
-  font-size: 0.75rem;
-  color: var(--muted);
-  margin-bottom: 0.15rem;
-}
-
-.metric-value {
-  font-weight: 600;
-  font-size: 1rem;
-  color: var(--accent);
-}
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.2rem 0.6rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  border: 1px solid rgba(148, 163, 184, 0.5);
-  margin-left: 0.35rem;
-  background: var(--accent-soft);
-  color: var(--accent);
-}
-
-.badge.ok {
-  color: var(--ok);
-  border-color: rgba(74, 222, 128, 0.5);
-  background: rgba(22, 101, 52, 0.25);
-}
-
-.badge.error {
-  color: var(--error);
-  border-color: rgba(248, 113, 113, 0.5);
-  background: rgba(127, 29, 29, 0.35);
-}
-
-.badge.warn {
-  color: var(--warn);
-  border-color: rgba(250, 204, 21, 0.5);
-  background: rgba(113, 63, 18, 0.4);
-}
-
+/* Estilos de tabla */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 0.5rem;
-  font-size: 0.83rem;
-  border-radius: 0.9rem;
-  overflow: hidden;
-  border: 1px solid var(--border);
-}
-
-thead {
-  background: rgba(15, 23, 42, 0.9);
-}
-
-th,
-td {
-  padding: 0.45rem 0.55rem;
-  text-align: left;
+  background: rgba(34, 40, 37, 0.5);
 }
 
 th {
-  font-weight: 500;
-  color: var(--muted);
-  border-bottom: 1px solid var(--border);
-  font-size: 0.8rem;
+  background-color: #4A5D4E;
+  color: #ffffff !important;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  opacity: 1 !important;
 }
 
-tbody tr:nth-child(even) {
-  background-color: rgba(15, 23, 42, 0.65);
+td {
+  padding: 12px;
+  border-bottom: 1px solid rgba(74, 93, 78, 0.2);
+  color: #ffffff !important;
+  opacity: 1 !important;
 }
 
-tbody tr:nth-child(odd) {
-  background-color: rgba(15, 23, 42, 0.35);
+tr:nth-child(even) {
+  background-color: rgba(74, 93, 78, 0.1);
 }
 
-tbody tr:hover {
-  background-color: rgba(30, 64, 175, 0.3);
-}
-
+/* Estilos de badges y pills */
 .pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 2.1rem;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  padding: 0.1rem 0.5rem;
-  font-size: 0.75rem;
-  background-color: rgba(15, 23, 42, 0.9);
+  background-color: #4A5D4E;
+  color: #ffffff !important;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-weight: 500;
+  opacity: 1 !important;
 }
 
-.legend {
-  font-size: 0.78rem;
-  color: var(--muted);
-  margin-top: 0.4rem;
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  opacity: 1 !important;
 }
 
-.chips-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-  margin-top: 0.35rem;
+.badge.ok {
+  background-color: #4A5D4E;
+  color: #ffffff !important;
 }
 
-.chip-small {
-  font-size: 0.73rem;
-  padding: 0.22rem 0.55rem;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background-color: rgba(15, 23, 42, 0.9);
-  color: var(--muted);
+.badge.error {
+  background-color: #b94a4a;
+  color: #ffffff !important;
 }
 
-.highlight {
-  border-left: 3px solid var(--accent);
-  padding-left: 0.7rem;
-  margin-top: 0.4rem;
-  font-size: 0.9rem;
+.badge.warn {
+  background-color: #e0a800;
+  color: #ffffff !important;
 }
 
+/* Footer */
 footer {
-  margin-top: 2rem;
-  font-size: 0.8rem;
-  color: var(--muted);
-  text-align: center;
-  opacity: 0.8;
+  background-color: rgba(34, 40, 37, 0.95);
+  border-top: 1px solid rgba(74, 93, 78, 0.3);
+  color: #ffffff !important;
+  opacity: 1 !important;
 }
 
-@media (max-width: 720px) {
-  header {
-    position: static;
-  }
+footer a {
+  color: #ffffff !important;
+  opacity: 1 !important;
 }
+
+footer a:hover {
+  color: #4A5D4E !important;
+}
+
+/* Material Symbols */
+.material-symbols-outlined {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* IMPORTANTE: Sobrescribir TODAS las clases de Tailwind que aplican color de texto */
+body * {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* Excepción: botones y elementos especiales */
+button {
+  opacity: 1 !important;
+}
+
+button * {
+  color: #ffffff !important;
+}
+
+/* Asegurar que h1, h2, h3, h4, h5, h6 sean verde musgo */
+h1, h2, h3, h4, h5, h6 {
+  color: #4A5D4E !important;
+  opacity: 1 !important;
+  font-weight: 700 !important;
+}
+
+/* Texto en párrafos, listas, spans */
+p, li, span, div, a, label, td {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* Fuerza ultra en cualquier elemento dentro de main o section */
+main *, section *, article * {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* Excepciones para h1-h6 dentro de main/section/article */
+main h1, main h2, main h3, main h4, main h5, main h6,
+section h1, section h2, section h3, section h4, section h5, section h6,
+article h1, article h2, article h3, article h4, article h5, article h6 {
+  color: #4A5D4E !important;
+}
+
+/* Métricas */
+.metric {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.metric-label {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.metric-value {
+  color: #4A5D4E !important;
+  opacity: 1 !important;
+}
+
