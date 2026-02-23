@@ -131,4 +131,4 @@ Proyecto distribuido bajo licencia MIT.
 
 Proyecto desarrollado como sistema de clasificación de fallas en procesos industriales.  
 
-**Contacto:** [Tu información aquí]
+**Contacto:** Carlos Acevedo 
